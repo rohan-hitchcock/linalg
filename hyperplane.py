@@ -84,7 +84,7 @@ class Hyperplane:
     
     def __hash__(self):
         
-        # use cached value if it is availible
+        # use cached value if it is available
         if self._hash_val is not None:
             return self._hash_val
 
@@ -137,7 +137,7 @@ class Hyperplane:
         """
         # we check both `is_zero_vector(self._intercept)` and `self.contains(np.zeros(self.dim()))`
         # since many subspaces will be represented with a zero intercept (and checking this
-        # is much more efficient), but it is not guarunteed 
+        # is much more efficient), but it is not guaranteed 
         return self.is_empty() or core.is_zero_vector(self._intercept) or self.contains(np.zeros(self.parent_dim()))
 
     def dim(self):
@@ -441,7 +441,7 @@ class Hyperplane:
         if self.dim() != 1:
             raise ValueError("Space must be a line")
         
-        # makes the parametisation exposed by this method more consistant
+        # makes the parametrization exposed by this method more consistent
         b = core.unit(self._basis)
         
         return lambda t : (b.T @ np.atleast_2d(t)).T + self._intercept
@@ -502,7 +502,7 @@ class Hyperplane:
         """ Creates a subspace directly from a basis. Performs no 
             checking on input data. If `basis` is not a
             basis and `intercept` (if given) not a vector in the same dimension
-            then the behaviour of this object is undefined.    
+            then the behavior of this object is undefined.    
         """    
     
         out = Hyperplane.create_empty_space()

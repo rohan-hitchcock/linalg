@@ -1,18 +1,19 @@
 def compute_all_intersections(hyperplanes):
     """ Computes all possible intersections of Hyperplane objects. 
     
-        In the worst case this algorithm has O(2^n) time complexity, which occurs 
-        when every possible intersection of the hyperplanes is unique. In practice 
-        this situation is rare: note that HJ = J or HJ = H or dim(HJ) < min(dim(H), dim(J))
-        for hyperplanes H and J. This algorithm is written to considerably improve 
-        the running time when many intersections are the same, and to avoid computing 
-        any intersection more than once. 
+        In the worst case this algorithm has O(2^n) time complexity, where n is 
+        the length of `hyperplanes`. This occurs when every possible intersection 
+        the hyperplanes is unique. In practice this situation is rare: note that 
+        HJ = J or HJ = H or dim(HJ) < min(dim(H), dim(J))for hyperplanes H and J. 
+        This algorithm is written to considerably improve the running time when 
+        many intersections are the same, and to avoid computing any intersection 
+        more than once. 
 
         Args:
-            hyperplanes: a list of hyperplanes (must be an ordered collection).
+            hyperplanes: a list of hyperplanes.
 
         Returns:
-            A set of all possible non-empty intersections, including the elements of 
+            A set of all possible non-empty intersections, including the elements from 
             `hyperplanes`
     """
 

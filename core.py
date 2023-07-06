@@ -48,7 +48,7 @@ def projection(v, u, projecting_onto_unit=False):
             each `v[i]`
             u: A 1D numpy array. The vector we project onto.
             projecting_onto_unit: Can be set to `True` if `u` is known to be a unit
-            vector to avoid unnecessary calculations (for example, to avoid uneccessarily
+            vector to avoid unnecessary calculations (for example, to avoid unnecessarily
             accumulating numerical errors).
 
         Returns:
@@ -119,7 +119,7 @@ def is_orthonormal(vectors):
 
 
 def row_reduce(matrix, rref=True):
-    """ Performs Guassian elimination to row reduce a matrix.
+    """ Performs Gaussian elimination to row reduce a matrix.
 
         Args:
             matrix: A matrix as a 2D numpy array.
@@ -221,7 +221,7 @@ def rank(matrix):
 
 
 def is_linearly_independent(vectors):
-    """ Returns True if and only if `vectors` is linearly indepdenent."""
+    """ Returns True if and only if `vectors` is linearly independent."""
     _, pivot_mask = row_reduce(vectors.T, rref=False)
     return np.all(pivot_mask)
 
