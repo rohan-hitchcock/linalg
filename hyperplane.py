@@ -25,7 +25,7 @@ class Hyperplane:
         # caching variables 
         self.caching = caching
         self._hash_val = None
-        self._projection_matrix = None
+        self._orthonormal_basis = None
 
         # construct the empty subspace
         if spanning_set is None:
@@ -184,21 +184,28 @@ class Hyperplane:
         v_proj = np.matmul(v_translated, self.get_projection_matrix())
         return v_proj + self._intercept
     
-    def get_projection_matrix(self):
-        """ Gets the projection matrix for this hyperplane. If `self` is a vector 
-            subspace then this is the orthogonal projection onto `self`."""
 
-        if self._projection_matrix is not None:
-            return self._projection_matrix
+    def get_orthonormal_basis(self):
+        """ Gets an orthonormal basis for the subspace component of this hyperplane"""
 
+        if self._orthonormal_basis is not None:
+            return self._orthonormal_basis
+        
         obasis = core.orthoganalize(self._basis, normalize=True)
-        proj_matrix = np.matmul(obasis.T, obasis)
 
         if self.caching:
-            self._projection_matrix = proj_matrix
-            self._projection_matrix.flags.writeable = False
+            self._orthonormal_basis = obasis
+            self._orthonormal_basis.flags.writable = False
 
-        return proj_matrix
+        return obasis
+
+    def get_projection_matrix(self):
+        """ Gets the orthogonal projection matrix onto the subspace component of 
+            this hyperplane
+        """
+
+        obasis = self.get_orthonormal_basis()
+        return np.matmul(obasis.T, obasis)
 
     def distance_to(self, v):
         """ Computes the Euclidean distance from a point or set of points `v` to 
@@ -251,9 +258,11 @@ class Hyperplane:
         copy = Hyperplane.create_from_basis(self._basis.copy(), self._intercept.copy())
         copy.caching = self.caching
         copy._hash_val = self._hash_val
-        if self._projection_matrix is not None:
-            copy._projection_matrix = self._projection_matrix.copy()
-            copy._projection_matrix.flags.writeable = False    
+
+        if self._orthonormal_basis is not None:
+            copy._orthonormal_basis = self._orthonormal_basis.copy()
+            copy._orthonormal_basis.flags.writable = False
+   
         return copy
 
     def intersect(self, other):
@@ -308,9 +317,6 @@ class Hyperplane:
     
     # TODO: consider whether all of the methods below are necessary. 
 
-    # TODO: consider whether it makes more sense to cache an orthonormal basis 
-    # rather than the projection matrix. 
-
     def get_project_to_Rdim(self):
         """ Let n = self.parent_dim() and m = self.dim(). Computes the map
             Rn ---> self ---> Rm where the first map is orthogonal projection 
@@ -322,7 +328,7 @@ class Hyperplane:
         if not self.is_subspace():
             raise NotImplementedError()
 
-        obasis = core.orthoganalize(self._basis, normalize=True)
+        obasis = self.get_orthonormal_basis()
         return obasis
     
     def orthogonal_complement(self, careful=True):
