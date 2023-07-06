@@ -1,6 +1,5 @@
 import numpy as np
 import xxhash
-from scipy import stats
 
 import core
 
@@ -441,7 +440,7 @@ class Hyperplane:
         
         return lambda t : (b.T @ np.atleast_2d(t)).T + self._intercept
 
-    def sample(self, n, coeff_dist=stats.norm().rvs):
+    def sample(self, n, coeff_dist=None):
         """ Gets `n` random vectors from this vector space. By default, these are 
             constructed by generating coefficients for the basis vectors of `self`
             from a standard normal distribution. 
@@ -464,6 +463,10 @@ class Hyperplane:
         # return n copies of the point
         if self.is_point():
             return np.tile(self._intercept, (n, 1))
+
+        if coeff_dist is None:
+            rng = np.random.default_rng()
+            coeff_dist = rng.standard_normal
 
         coeffs = coeff_dist((n, self.dim()))
 
