@@ -356,10 +356,6 @@ class Hyperplane:
 
         complement = Hyperplane(complement_proj.T, caching=self.caching)
 
-        if self.caching:
-            complement._projection_matrix = complement_proj
-            complement._projection_matrix.flags.writeable = False
-
         return complement
 
     def get_kill_projection(self, careful=True):
