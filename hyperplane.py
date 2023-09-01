@@ -475,33 +475,33 @@ class Hyperplane:
         return np.matmul(coeffs, self._basis) + self._intercept
 
     @classmethod
-    def create_point_space(point):
+    def create_point_space(cls, point):
         """ Creates a Hyperplane object consisting only of `point`."""
 
         parent_dim = len(point)
         # an empty array of vectors with parent_dim entries
         basis = np.zeros(shape=(0, parent_dim), dtype=float)
-        return Hyperplane(basis, point)
+        return cls(basis, point)
 
     @classmethod
-    def create_zero_space(parent_dim):
+    def create_zero_space(cls, parent_dim):
         """ Creates a Hyperplane object consisting of the zero vector in the given
             dimension
         """
         # an empty array of vectors with parent_dim entries
         basis = np.zeros(shape=(0, parent_dim), dtype=float)
     
-        return Hyperplane(basis)
+        return cls(basis)
 
     @classmethod
-    def create_from_basis(basis, intercept=None):
+    def create_from_basis(cls, basis, intercept=None):
         """ Creates a subspace directly from a basis. Performs no 
             checking on input data. If `basis` is not a
             basis and `intercept` (if given) not a vector in the same dimension
             then the behavior of this object is undefined.    
         """    
     
-        out = Hyperplane.create_empty_space()
+        out = cls.create_empty_space()
 
         if intercept is None:
             intercept = np.zeros(basis.shape[1])
@@ -515,10 +515,10 @@ class Hyperplane:
         return out
 
     @classmethod
-    def create_empty_space():
-        return Hyperplane(None)
+    def create_empty_space(cls):
+        return cls(None)
     
     @classmethod
-    def create_solution_space(a, b=None):
-        return Hyperplane(*core.solve(a, b))
+    def create_solution_space(cls, a, b=None):
+        return cls(*core.solve(a, b))
     
